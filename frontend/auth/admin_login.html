@@ -1,0 +1,406 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Login — Voice Email Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/auth/auth.css">
+    <style>
+        .panel-left {
+            background: linear-gradient(145deg, #0f0f1a 0%, #1a1035 40%, #0d1b2a 100%);
+        }
+        .panel-left::before {
+            background: radial-gradient(ellipse at 30% 50%, rgba(139, 92, 246, 0.18) 0%, transparent 65%),
+                        radial-gradient(ellipse at 80% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 55%);
+        }
+        .accent { color: #a78bfa; }
+        .brand-icon { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+        .feat-card { border-color: rgba(139, 92, 246, 0.2); background: rgba(139, 92, 246, 0.07); }
+        .feat-card:hover { border-color: rgba(139, 92, 246, 0.45); background: rgba(139, 92, 246, 0.13); }
+
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+        .admin-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #a78bfa;
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        }
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #6d28d9, #4338ca);
+        }
+        .switch-text a, .forgot-link { color: #7c3aed; }
+        .switch-text a:hover, .forgot-link:hover { color: #a78bfa; }
+
+        .tab.active {
+            color: #7c3aed;
+            border-bottom-color: #7c3aed;
+        }
+        .tab:hover { color: #7c3aed; }
+
+        .admin-warning {
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #b8962e;
+        }
+        .admin-warning svg { flex-shrink: 0; }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .auth-tabs .tab:last-child { pointer-events: none; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="panel-left">
+    <div class="brand">
+        <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+        </div>
+        <span class="brand-name">VoiceMail</span>
+    </div>
+
+    <div class="left-content">
+        <div class="headline-block">
+            <h1>Control.<br><span class="accent">Monitor.</span><br>Scale.</h1>
+            <p class="subtext">Full visibility into every account, usage metric, and system event — from one powerful dashboard.</p>
+        </div>
+
+        <div class="feature-cards">
+            <div class="feat-card">
+                <div class="feat-icon">👥</div>
+                <div>
+                    <div class="feat-title">User Management</div>
+                    <div class="feat-desc">Manage all accounts</div>
+                </div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📊</div>
+                <div>
+                    <div class="feat-title">Analytics</div>
+                    <div class="feat-desc">Real-time insights</div>
+                </div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">🔒</div>
+                <div>
+                    <div class="feat-title">Access Control</div>
+                    <div class="feat-desc">Roles & permissions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-footer">Secured with 256-bit encryption</div>
+</div>
+
+<div class="panel-right">
+    <div class="auth-tabs">
+        <a href="/" class="tab">User Login</a>
+        <a href="/admin/login" class="tab active">Admin Login</a>
+    </div>
+
+    <div class="auth-form-wrap">
+        <div class="admin-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Administrator Access
+        </div>
+
+        <div class="form-header">
+            <h2>Admin Portal</h2>
+            <p>Restricted access — authorised personnel only</p>
+        </div>
+
+        <div class="admin-warning">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            All login attempts are logged and monitored
+        </div>
+
+        <div class="field-group">
+            <label>Admin Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@company.com">
+        </div>
+        <div class="field-group">
+            <div class="label-row">
+                <label>Password</label>
+                <a href="/admin/forgot-password" class="forgot-link">Reset access</a>
+            </div>
+            <input type="password" id="adminPassword" placeholder="••••••••••">
+        </div>
+        <div class="field-group">
+            <label>Admin Key</label>
+            <input type="password" id="adminKey" placeholder="Enter your admin secret key">
+        </div>
+
+        <button class="primary-btn" onclick="adminLogin()">Access Dashboard</button>
+
+        <p id="adminMsg" class="msg"></p>
+
+        <p class="switch-text"><a href="/">← Back to user login</a></p>
+    </div>
+</div>
+
+<script src="/static/auth/auth.js"></script>
+<script>
+async function adminLogin() {
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+    const adminKey = document.getElementById("adminKey").value;
+    const msgEl = document.getElementById("adminMsg");
+
+    if (!email || !password || !adminKey) {
+        msgEl.style.color = "#dc2626";
+        msgEl.innerText = "All fields are required.";
+        return;
+    }
+
+    const res = await fetch(`${BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, admin_key: adminKey })
+    });
+
+    if (res.redirected) {
+        window.location.href = res.url;
+        return;
+    }
+
+    const data = await res.json();
+    msgEl.style.color = res.ok ? "#16a34a" : "#dc2626";
+    msgEl.innerText = data.message || data.detail;
+}
+</script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Login — VoxMail</title>
+    <link rel="stylesheet" href="/static/auth/auth.css">
+    <style>
+        /* Admin-specific additions only — no color overrides on left panel */
+
+        /* Admin badge */
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--sage-dim);
+            border: 1px solid rgba(74,124,89,0.25);
+            color: var(--sage);
+            font-family: var(--fm);
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+        .admin-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--sage);
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.4; transform: scale(0.75); }
+        }
+
+        /* Warning bar */
+        .admin-warning {
+            background: rgba(185,64,64,0.06);
+            border: 1px solid rgba(185,64,64,0.18);
+            border-radius: var(--r);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-family: var(--fm);
+            font-size: 11.5px;
+            color: var(--rp-t2);
+            letter-spacing: 0.2px;
+        }
+        .admin-warning svg { flex-shrink: 0; color: var(--db-danger); }
+    </style>
+</head>
+<body>
+
+<!-- LEFT PANEL — same dashboard sidebar colors as user login -->
+<div class="panel-left">
+    <!-- <div class="brand">
+        <div class="brand-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+        </div>
+        <span class="brand-name">VoXMail</span>
+    </div> -->
+    <div class="brand">
+        <div class="brand-icon">✦</div>
+        <div class="brand-text">
+            <span class="brand-name">VoXMail</span>
+            <span class="brand-name">Assistant</span>
+        </div>
+    </div>
+
+    <div class="left-content">
+        <div class="headline-block">
+            <h1>Control.<br><span class="accent">Monitor.</span><br>Scale.</h1>
+            <p class="subtext">Full visibility into every account, usage metric, and system event — from one powerful dashboard.</p>
+        </div>
+
+        <div class="feature-cards">
+            <div class="feat-card">
+                <div class="feat-icon">👥</div>
+                <div>
+                    <div class="feat-title">User Management</div>
+                    <div class="feat-desc">Manage all accounts</div>
+                </div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📊</div>
+                <div>
+                    <div class="feat-title">Analytics</div>
+                    <div class="feat-desc">Real-time insights</div>
+                </div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">🔒</div>
+                <div>
+                    <div class="feat-title">Access Control</div>
+                    <div class="feat-desc">Roles &amp; permissions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-footer">Secured with 256-bit encryption</div>
+</div>
+
+<!-- RIGHT PANEL — white -->
+<div class="panel-right">
+    <div class="auth-tabs">
+        <a href="/" class="tab">User Login</a>
+        <a href="/admin/login" class="tab active">Admin Login</a>
+    </div>
+
+    <div class="auth-form-wrap">
+        <div class="admin-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Administrator Access
+        </div>
+
+        <div class="form-header">
+            <h2>Admin Portal</h2>
+            <p>Restricted access — authorised personnel only</p>
+        </div>
+
+        <div class="admin-warning">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            All login attempts are logged and monitored
+        </div>
+
+        <div class="field-group">
+            <label>Admin Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@company.com">
+        </div>
+        <div class="field-group">
+            <div class="label-row">
+                <label>Password</label>
+                <a href="/admin/forgot-password" class="forgot-link">Reset access</a>
+            </div>
+            <input type="password" id="adminPassword" placeholder="••••••••••">
+        </div>
+        <div class="field-group">
+            <label>Admin Secret Key</label>
+            <input type="password" id="adminKey" placeholder="Enter your admin secret key">
+        </div>
+
+        <button class="primary-btn" onclick="adminLogin()">Access Dashboard</button>
+
+        <p id="adminMsg" class="msg"></p>
+
+        <p class="switch-text"><a href="/">← Back to user login</a></p>
+    </div>
+</div>
+
+<script src="/static/auth/auth.js"></script>
+<script>
+async function adminLogin() {
+    const email    = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+    const adminKey = document.getElementById("adminKey").value;
+    const msgEl    = document.getElementById("adminMsg");
+
+    if (!email || !password || !adminKey) {
+        msgEl.style.color = "#b94040";
+        msgEl.innerText = "All fields are required.";
+        return;
+    }
+
+    const res = await fetch(`${BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, admin_key: adminKey })
+    });
+
+    if (res.redirected) { window.location.href = res.url; return; }
+
+    const data = await res.json();
+    msgEl.style.color = res.ok ? "#4a7c59" : "#b94040";
+    msgEl.innerText = data.message || data.detail;
+}
+</script>
+</body>
+</html>

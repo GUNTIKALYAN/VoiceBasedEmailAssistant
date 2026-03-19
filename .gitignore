@@ -1,0 +1,55 @@
+# ───────── PYTHON ─────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# ───────── ENV FILES ─────────
+.env
+.env.*
+*.env
+
+# ───────── VIRTUAL ENV ─────────
+venv/
+env/
+ENV/
+
+# ───────── IDE ─────────
+.vscode/
+.idea/
+
+# ───────── OS FILES ─────────
+.DS_Store
+Thumbs.db
+
+# ───────── LOGS ─────────
+*.log
+
+# ───────── RUNTIME DATA ─────────
+backend/saved_emails/
+backend/summaries/
+
+# ───────── GOOGLE / AUTH ─────────
+backend/app/voice/credentials.json
+backend/token.json
+backend/app/credentials.json
+backend/app/token.json
+credentials.json
+token.json
+backend/secrets/
+tests/
+milestone1.txt
+workflow.txt
+
+
+# ───────── CACHE ─────────
+.cache/
+
+# ───────── NODE (if any later) ─────────
+node_modules/
+
+# ───────── BUILD FILES ─────────
+dist/
+build/

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoxMail Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/admin-ui/admin.css"/>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-name">VoXMail</div>
+        <div class="logo-sub">Admin Panel</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+
+      <a class="nav-item active" onclick="switchTab('dashboard', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </a>
+
+      <a class="nav-item" onclick="switchTab('users', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Users
+        <span class="nav-badge" id="user-count-badge">25</span>
+      </a>
+
+      <a class="nav-item" onclick="switchTab('activity', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Activity Log
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+
+      <a class="nav-item" onclick="switchTab('health', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+        System Health
+      </a>
+
+      <a class="nav-item" onclick="switchTab('settings', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.07 4.93A10 10 0 1 0 4.93 19.07"/>
+          <path d="M20.66 16A9.95 9.95 0 0 0 22 12"/>
+        </svg>
+        Settings
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="avatar">SA</div>
+      <div class="footer-info">
+        <div class="footer-name">Super Admin</div>
+        <div class="footer-email">admin@voxmail.io</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <span class="topbar-title" id="page-title">Overview</span>
+      <div class="status-dot"></div>
+      <span style="font-size:12px;color:var(--hint)">All systems operational</span>
+      <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+      <div class="topbar-date" id="topbar-date">—</div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── METRIC CARDS ────────────────────────────── -->
+      <div class="metrics-grid">
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Total Users</span>
+            <div class="metric-icon" style="background:#EBF2EC">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3A6B3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+          </div>
+          <div class="metric-value" id="totalUsers">0</div>
+          <div class="metric-delta delta-up">↑ +1 this week</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Emails Sent</span>
+            <div class="metric-icon" style="background:#EBF0F9">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2B5FA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="metric-value" id="m-emails">3</div>
+          <div class="metric-delta delta-up">↑ +1 today</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Active Sessions</span>
+            <div class="metric-icon" style="background:#FDF3E3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#A0620E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+          </div>
+          <div class="metric-value" id="m-sessions">7</div>
+          <div class="metric-delta delta-neu">→ same as yesterday</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Error Rate</span>
+            <div class="metric-icon" style="background:#FAECEA">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#C84B3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+          </div>
+          <div class="metric-value" id="m-errors">0.4%</div>
+          <div class="metric-delta delta-down">↓ –0.1% vs last week</div>
+        </div>
+
+      </div>
+
+      <!-- ── TWO COLUMN ──────────────────────────────── -->
+      <div class="two-col">
+
+        <!-- User Management Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">User Management</div>
+              <div class="panel-sub">Manage accounts, roles, and access</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="search-wrap">
+                <div class="search-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </div>
+                <input
+                  class="search-input"
+                  id="user-search"
+                  placeholder="Search users…"
+                  oninput="filterUsers(this.value)"
+                />
+              </div>
+            </div>
+          </div>
+
+          <table class="user-table" id="user-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Emails</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="user-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-col">
+
+          <!-- Activity Feed -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">Recent Activity</div>
+                <div class="panel-sub">Live system events</div>
+              </div>
+              <button class="panel-action" onclick="clearActivity()">Clear</button>
+            </div>
+            <div class="activity-list" id="activity-feed"></div>
+          </div>
+
+          <!-- System Health -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">System Health</div>
+              <div style="display:flex;align-items:center;gap:5px">
+                <div class="status-dot"></div>
+                <span style="font-size:11px;color:var(--hint)">Live</span>
+              </div>
+            </div>
+            <div class="health-grid">
+              <div class="health-item">
+                <div class="health-label">CPU</div>
+                <div class="health-value" id="h-cpu">—</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="h-cpu-bar" style="background:var(--accent2);width:0%"></div>
+                </div>
+              </div>
+              <div class="health-item">
+                <div class="health-label">Memory</div>
+                <div class="health-value" id="h-mem">—</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="h-mem-bar" style="background:#2B5FA0;width:0%"></div>
+                </div>
+              </div>
+              <div class="health-item">
+                <div class="health-label">API Uptime</div>
+                <div class="health-value" style="color:var(--accent)">99.9%</div>
+                <div class="health-sub">Last 30 days</div>
+              </div>
+              <div class="health-item">
+                <div class="health-label">Response</div>
+                <div class="health-value" id="h-resp">—</div>
+                <div class="health-sub">avg latency</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /right-col -->
+      </div><!-- /two-col -->
+
+    </div><!-- /content -->
+  </main><!-- /main -->
+
+  <!-- ══════════════════════════════════════════════════
+       DELETE CONFIRMATION MODAL
+  ══════════════════════════════════════════════════ -->
+  <div class="modal-bg" id="delete-modal">
+    <div class="modal">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4h6v2"/>
+        </svg>
+      </div>
+      <div class="modal-title">Remove User</div>
+      <div class="modal-body">
+        You're about to permanently remove <strong id="modal-user-name">—</strong>.
+        This will revoke their access and delete all associated data.
+        This action cannot be undone.
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Remove User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TOAST NOTIFICATION
+  ══════════════════════════════════════════════════ -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    <span id="toast-msg">Done</span>
+  </div>
+
+  <script src="/static/admin-ui/admin.js"></script>
+</body>
+</html>

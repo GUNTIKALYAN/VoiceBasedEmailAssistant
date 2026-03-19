@@ -1,0 +1,359 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoxMail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/voice-ui/dashboard.css" />
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+      <div class="brand-text">
+        <span class="brand-name">VoxMail</span>
+        <span class="brand-tag">assistant</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <span class="nav-section-label">Tools</span>
+
+      <button class="nav-btn" id="navAssistant" data-tool="assistant" onclick="App.navClick(this)">
+        <span class="nav-icon">🎙</span>
+        <span class="nav-label">Start Assistant</span>
+        <span class="nav-live" id="navLive"></span>
+      </button>
+
+      <button class="nav-btn" id="navInbox" data-tool="inbox" onclick="App.navClick(this)">
+        <span class="nav-icon">📥</span>
+        <span class="nav-label">Primary Inbox</span>
+        <span class="nav-count" id="inboxCount">5</span>
+      </button>
+
+      <button class="nav-btn" id="navSend" data-tool="send" onclick="App.navClick(this)">
+        <span class="nav-icon">📤</span>
+        <span class="nav-label">Send Email</span>
+      </button>
+
+      <button class="nav-btn" id="navCompose" data-tool="compose" onclick="App.navClick(this)">
+        <span class="nav-icon">✏️</span>
+        <span class="nav-label">Compose</span>
+      </button>
+
+      <button class="nav-btn" id="navSearch" data-tool="search" onclick="App.navClick(this)">
+        <span class="nav-icon">🔍</span>
+        <span class="nav-label">Search</span>
+      </button>
+
+      <span class="nav-section-label" style="margin-top:0.5rem">Integrations</span>
+
+      <button class="nav-btn nav-wa" id="navWa" data-tool="whatsapp" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </span>
+        <span class="nav-label">WhatsApp</span>
+        <span class="nav-beta">Beta</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-pip">{{ username[0] | upper }}</div>
+      <div class="user-details">
+        <span class="user-name">{{ username }}</span>
+        <span class="user-email">{{ email }}</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="main" id="main">
+
+    <header class="topbar">
+      <button class="hamburger" onclick="App.toggleSidebar()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="cmd-bar">
+        <span class="cmd-prefix">/</span>
+        <input
+          id="cmdInput"
+          class="cmd-input"
+          type="text"
+          placeholder="Type a command…"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter') App.sendCmd()"
+        />
+        <button class="cmd-go" onclick="App.sendCmd()">⏎</button>
+      </div>
+
+      <div class="status-chip" id="statusChip">
+        <span class="status-orb" id="statusOrb"></span>
+        <span id="statusTxt">Standby</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="mic-wrap">
+        <button class="mic-btn" id="micBtn" onclick="App.toggleMic()">
+          <span id="micGlyph">🎤</span>
+          <span class="ring r1"></span>
+          <span class="ring r2"></span>
+          <span class="ring r3"></span>
+        </button>
+        <p class="mic-sub" id="micSub">Tap to speak</p>
+      </div>
+
+      <div class="wave-wrap">
+        <div class="wave-bars" id="waveBars"></div>
+        <p class="wave-state" id="waveState">Ready · waiting for input</p>
+      </div>
+    </section>
+
+    <section class="log-section">
+      <div class="log-topbar">
+        <div class="log-title-row">
+          <span class="log-orb" id="logOrb"></span>
+          <h2 class="log-heading">Activity Log</h2>
+        </div>
+        <div class="log-controls">
+          <div class="tts-group">
+            <input
+              id="ttsInput"
+              class="tts-input"
+              type="text"
+              placeholder="Type to speak aloud…"
+              onkeydown="if(event.key==='Enter') App.speakText()"
+            />
+            <button class="tts-btn" onclick="App.speakText()" title="Speak">🔊</button>
+          </div>
+          <button class="clear-btn" id="clearBtn">Clear</button>
+        </div>
+      </div>
+
+      <div class="log-feed" id="logFeed">
+        <div class="log-empty" id="logEmpty">
+          <span class="empty-glyph">◌</span>
+          <p>No activity yet — tap the mic or type a command.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="overlay" id="overlay" onclick="App.closePanel()"></div>
+  <aside class="panel" id="panel">
+    <div class="panel-head">
+      <h3 class="panel-title" id="panelTitle">Panel</h3>
+      <button class="panel-close" onclick="App.closePanel()">✕</button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+  </aside>
+
+  <script src="/static/voice-ui/dashboard.js"></script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoxMail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/voice-ui/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Close button (mobile only) -->
+    <button class="sidebar-close" onclick="App.toggleSidebar()" aria-label="Close sidebar">✕</button>
+
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+      <div class="brand-text">
+        <span class="brand-name">VoXMail</span>
+        <span class="brand-tag">assistant</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <span class="nav-section-label">Tools</span>
+
+      <button class="nav-btn" id="navAssistant" data-tool="assistant" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <i class="fa-solid fa-microphone"></i>
+        </span>
+        <span class="nav-label">Start Assistant</span>
+        <span class="nav-live" id="navLive"></span>
+      </button>
+
+      <button class="nav-btn" id="navInbox" data-tool="inbox" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <i class="fa-regular fa-envelope"></i>
+        </span>
+        <span class="nav-label">Primary Inbox</span>
+        <span class="nav-count" id="inboxCount">10</span>
+      </button>
+
+      <button class="nav-btn" id="navSend" data-tool="send" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <i class="fa-regular fa-paper-plane"></i>
+        </span>
+        <span class="nav-label">Send Email</span>
+      </button>
+
+      <button class="nav-btn" id="navCompose" data-tool="compose" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <i class="fa-regular fa-pen-to-square"></i>
+        </span>
+        <span class="nav-label">Compose</span>
+      </button>
+
+      <button class="nav-btn" id="navSearch" data-tool="search" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <span class="nav-label">Search</span>
+      </button>
+
+      <span class="nav-section-label" style="margin-top:0.5rem">Integrations</span>
+
+      <button class="nav-btn nav-wa" id="navWa" data-tool="whatsapp" onclick="App.navClick(this)">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </span>
+        <span class="nav-label">WhatsApp</span>
+        <span class="nav-beta">Beta</span>
+      </button>
+    </nav>
+
+    <!-- User footer -->
+    <div class="sidebar-footer">
+      <div class="user-pip">{{ (username or "U")[0] | upper }}</div>
+      <div class="user-details">
+        <span class="user-name">{{ username }}</span>
+        <span class="user-email">{{ email or "Not logged in" }}</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="main" id="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="hamburger" onclick="App.toggleSidebar()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="cmd-bar">
+        <span class="cmd-prefix">/</span>
+        <input
+          id="cmdInput"
+          class="cmd-input"
+          type="text"
+          placeholder="Type a command…"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter') App.sendCmd()"
+        />
+        <button class="cmd-go" onclick="App.sendCmd()">⏎</button>
+      </div>
+
+      <button class="logout-btn" onclick="App.logout()">Logout</button>
+      <div class="status-chip" id="statusChip">
+        <span class="status-orb" id="statusOrb"></span>
+        <span id="statusTxt">Standby</span>
+      </div>
+    </header>
+
+    <!-- Mic + Waveform hero -->
+    <section class="hero">
+      <div class="mic-wrap">
+        <button class="mic-btn" id="micBtn" onclick="App.toggleMic()">
+          <span id="micGlyph">
+            <i class="fa-solid fa-microphone"></i>
+          </span>
+          <span class="ring r1"></span>
+          <span class="ring r2"></span>
+          <span class="ring r3"></span>
+        </button>
+        <p class="mic-sub" id="micSub">Tap to speak</p>
+      </div>
+
+      <div class="wave-wrap">
+        <div class="wave-bars" id="waveBars"></div>
+        <p class="wave-state" id="waveState">Ready · waiting for input</p>
+      </div>
+    </section>
+
+    <!-- Activity log -->
+    <section class="log-section">
+      <div class="log-topbar">
+        <div class="log-title-row">
+          <span class="log-orb" id="logOrb"></span>
+          <h2 class="log-heading">Activity Log</h2>
+        </div>
+        <div class="log-controls">
+          <div class="tts-group">
+            <input
+              id="ttsInput"
+              class="tts-input"
+              type="text"
+              placeholder="Type to speak aloud…"
+              onkeydown="if(event.key==='Enter') App.speakText()"
+            />
+            <button class="tts-btn" onclick="App.speakText()" title="Speak">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <button class="clear-btn" id="clearBtn">Clear</button>
+        </div>
+      </div>
+
+      <div class="log-feed" id="logFeed">
+        <div class="log-empty" id="logEmpty">
+          <span class="empty-glyph">◌</span>
+          <p>No activity yet — tap the mic or type a command.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════ OVERLAY ═══════ -->
+  <div class="overlay" id="overlay" onclick="App.closePanel()"></div>
+
+  <!-- ═══════ SLIDE PANEL ═══════ -->
+  <aside class="panel" id="panel">
+    <div class="panel-head">
+      <h3 class="panel-title" id="panelTitle">Panel</h3>
+      <button class="panel-close" onclick="App.closePanel()">✕</button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+  </aside>
+
+  <script>
+    window.User = {
+      username: "{{ username }}",
+      email: "{{ email }}"
+    }
+  </script>
+
+  <script src="/static/voice-ui/dashboard.js"></script>
+</body>
+</html>
