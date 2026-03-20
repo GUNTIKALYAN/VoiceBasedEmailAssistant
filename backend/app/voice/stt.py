@@ -34,43 +34,6 @@ def speech_to_text(language=None):
     if assistant_control.exit_requested:
         return None, None
         
-        # FIXED LANGUAGE MODE
-    # if language:
-    #     is_login_phase = assistant_state.user_email is None
-
-    #     try:
-    #         if is_login_phase:
-    #             text = recognizer.recognize_google(audio, language="en-IN")
-    #         else:
-    #             text = recognizer.recognize_google(audio, language=assistant_state.session_language)
-    #             print(f"Recognized ({language}):", text)
-    #         return text.lower(), language
-        
-    #     except sr.UnknownValueError:
-    #         return None, language
-
-    #     except sr.RequestError:
-    #         print("Speech API error")
-    #         return None, language
-
-    # # Try multiple languages automatically
-    # for lang in SUPPORTED_LANGUAGES:
-
-    #     if assistant_control.exit_requested:
-    #         return None, None
-
-    #     try:
-    #         text = recognizer.recognize_google(audio, language=lang)
-    #         print(f"Recognized ({lang}):", text)
-    #         return text.lower(), lang
-
-    #     except sr.UnknownValueError:
-    #         continue
-
-    #     except sr.RequestError:
-    #         print("Speech API error")
-    #         return None, None
-
     # return None, None
     if assistant_state.user_email is None:
         lang = "en-IN"   # force English for login

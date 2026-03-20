@@ -112,21 +112,6 @@ def send_email_node(state: EmailState):
 
 builder = StateGraph(EmailState)
 
-# builder.add_node("generate_email", generate_email)
-# builder.add_node("confirm_email", confirm_email)
-# builder.add_node("verify_pin", verify_pin)
-# builder.add_node("send_email", send_email_node)
-
-# builder.set_entry_point("generate_email")
-
-# builder.add_edge("generate_email", "confirm_email")
-# builder.add_edge("confirm_email", "verify_pin")
-# builder.add_edge("verify_pin", "send_email")
-# builder.add_edge("send_email", END)
-
-
-builder = StateGraph(EmailState)
-
 builder.add_node("generate_email", generate_email)
 
 builder.set_entry_point("generate_email")
@@ -151,70 +136,3 @@ def run_email_agent():
     return result["generated_email"]
 
 
-
-# from typing import TypedDict
-
-# from langgraph.graph import StateGraph, END
-# from langchain_groq import ChatGroq
-
-
-# # LLM
-# llm = ChatGroq(
-#     model="llama-3.1-8b-instant",
-#     temperature=0.2
-# )
-
-
-# # Agent State
-# class EmailState(TypedDict):
-
-#     recipient: str
-#     subject: str
-#     intent: str
-
-#     generated_email: str
-
-
-# # EMAIL GENERATION NODE
-# def generate_email(state: EmailState):
-
-#     prompt = f"""
-# Write a professional email.
-
-# Recipient: {state['recipient']}
-# Subject: {state['subject']}
-
-# User Intent:
-# {state['intent']}
-
-# Rules:
-# - clear
-# - polite
-# - concise
-# - professional
-# - include greeting and closing
-# """
-
-#     response = llm.invoke(prompt)
-
-#     email_text = response.content
-
-#     print("\n------ GENERATED EMAIL ------")
-#     print(email_text)
-#     print("-----------------------------\n")
-
-#     return {
-#         "generated_email": email_text
-#     }
-
-
-# # GRAPH DEFINITION
-# builder = StateGraph(EmailState)
-
-# builder.add_node("generate_email", generate_email)
-
-# builder.set_entry_point("generate_email")
-
-# builder.add_edge("generate_email", END)
-
-# email_agent = builder.compile()

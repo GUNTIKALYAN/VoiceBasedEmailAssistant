@@ -1,0 +1,67 @@
+# ───────── PYTHON ─────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ───────── ENV FILES (VERY IMPORTANT) ─────────
+.env
+.env.*
+*.env
+
+# ───────── VIRTUAL ENV ─────────
+venv/
+env/
+ENV/
+
+# ───────── IDE ─────────
+.vscode/
+.idea/
+
+# ───────── OS FILES ─────────
+.DS_Store
+Thumbs.db
+
+# ───────── LOGS ─────────
+*.log
+
+# ───────── DATABASE FILES ─────────
+*.db
+*.sqlite3
+
+# ───────── RUNTIME DATA ─────────
+backend/saved_emails/
+backend/summaries/
+
+# ───────── SECRETS (CRITICAL) ─────────
+credentials.json
+token.json
+backend/token.json
+backend/credentials.json
+backend/app/token.json
+backend/app/credentials.json
+backend/secrets/
+
+# ───────── TESTS / DOCS ─────────
+tests/
+milestone1.txt
+workflow.txt
+
+# ───────── CACHE ─────────
+.cache/
+
+# ───────── NODE ─────────
+node_modules/
+
+# ───────── BUILD FILES ─────────
+dist/
+build/
+
+# ───────── GIT ─────────
+.git/
+.gitignore
+
+# ───────── DOCKER FILES (optional) ─────────
+docker-compose.yml
+Dockerfile.frontend
+Dockerfile.backend

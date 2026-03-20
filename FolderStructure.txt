@@ -1,0 +1,89 @@
+EMAILVOICEASSISTANT/
+│
+├── backend/
+│   ├── app/
+│   │   ├── admin/
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── ai/
+│   │   │   ├── email_agent.py
+│   │   │   ├── email_analyzer.py
+│   │   │   ├── email_understanding.py
+│   │   │   └── groq_service.py
+│   │   │
+│   │   ├── auth/
+│   │   │   ├── dashboard_routes.py
+│   │   │   ├── models.py
+│   │   │   ├── routes.py
+│   │   │   └── utils.py
+│   │   │
+│   │   ├── commands/
+│   │   │   ├── command_parser.py
+│   │   │   └── commands.json
+│   │   │
+│   │   ├── core/
+│   │   │   ├── auth_guard.py
+│   │   │   ├── auth_middleware.py
+│   │   │   └── google_oauth.py
+│   │   │
+│   │   ├── gmail/
+│   │   │   ├── __init__.py
+│   │   │   ├── auth.py
+│   │   │   ├── read.py
+│   │   │   └── send.py
+│   │   │
+│   │   ├── models/
+│   │   │   └── request_models.py
+│   │   │
+│   │   ├── services/
+│   │   │   └── gmail_service.py
+│   │   │
+│   │   ├── utils/
+│   │   │   ├── assistant_control.py
+│   │   │   ├── conversational_state.py
+│   │   │   └── voice_utils.py
+│   │   │
+│   │   ├── voice/
+│   │   │   ├── edge_tts.py
+│   │   │   ├── stt.py
+│   │   │   ├── voice_loop.py
+│   │   │   └── wake_word.py
+│   │   │     
+│   │   │
+│   │   ├── db.py
+│   │   └── main.py
+│   │
+│   ├── saved_emails/      
+│   ├── summaries/        
+│   ├── token.json         
+│   ├── credentials.json
+|   ├── .env               
+│   └── __init__.py
+│
+├── frontend/
+│   ├── admin-ui/
+│   │   ├── admin.html
+│   │   ├── admin.css
+│   │   └── admin.js
+│   │
+│   ├── auth/
+│   │   ├── admin_login.html
+│   │   ├── auth.css
+│   │   ├── auth.js
+│   │   ├── login.html
+│   │   ├── set_password.html
+│   │   └── signup.html
+│   │
+│   ├── voice-ui/
+│   │   ├── index.html
+│   │   ├── dashboard.css
+│   │   └── dashboard.js
+│
+├── tests/
+│
+├── .gitignore
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── milestone1.txt
+└── workflow.txt

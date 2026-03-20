@@ -1,159 +1,3 @@
-# from fastapi import FastAPI, HTTPException, Request
-# from fastapi.staticfiles import StaticFiles
-# from fastapi.responses import FileResponse, RedirectResponse
-# from fastapi.templating import Jinja2Templates
-# from starlette.middleware.sessions import SessionMiddleware
-# # from app.gmail.read import fetch_primary_emails_for_ui
-
-# import os
-# from dotenv import load_dotenv
-
-# load_dotenv()
-
-# # Voice
-# from app.voice.stt import speech_to_text
-# from app.voice.edge_tts import speak
-# from app.voice.wake_word import detect_wake_word
-# from app.voice.voice_loop import run_voice_assistant
-
-# # Commands
-# from app.commands.command_parser import parse_command
-
-# # Models
-# from app.models.request_models import TextRequest, TextResponse
-
-# # Auth router
-# from app.auth.routes import router as auth_router
-# from app.auth.dashboard_routes import router as dashboard_router
-
-
-# # Gmail
-# # from app.gmail.read import fetch_recent_primary_emails
-# from app.services.gmail_service import fetch_recent_primary_emails
-
-
-# # Assistant Exit
-# from app.utils.assistant_control import request_exit 
-# from app.utils.conversational_state import assistant_state
-
-
-# app = FastAPI(title="Voice Email Assistant")
-
-# # Session middleware
-# app.add_middleware(
-#     SessionMiddleware,
-#     secret_key=os.getenv("SECRET_KEY")
-# )
-# # Template engine
-# # Paths
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
-# FRONTEND_PATH = os.path.join(PROJECT_ROOT, "frontend")
-# VOICE_UI_PATH = os.path.join(FRONTEND_PATH, "voice-ui")
-# AUTH_PATH = os.path.join(FRONTEND_PATH, "auth")
-
-# # Templates
-# templates = Jinja2Templates(directory=VOICE_UI_PATH)
-
-
-# FRONTEND_PATH = os.path.join(PROJECT_ROOT, "frontend")
-# VOICE_UI_PATH = os.path.join(FRONTEND_PATH, "voice-ui")
-# AUTH_PATH = os.path.join(FRONTEND_PATH, "auth")
-# ADMIN_PATH = os.path.join(FRONTEND_PATH, "admin")
-
-# print("STATIC SERVED FROM:", FRONTEND_PATH)
-
-
-# # Include routers
-# app.include_router(auth_router)
-# app.include_router(dashboard_router)
-
-# # Static mount
-# app.mount(
-#     "/static",
-#     StaticFiles(directory=FRONTEND_PATH),
-#     name="static"
-# )
-
-
-# # LOGIN PAGE
-# @app.get("/")
-# def home():
-#     return FileResponse(os.path.join(AUTH_PATH, "login.html"))
-
-
-# # SIGNUP PAGE
-# @app.get("/signup")
-# def load_signup():
-#     return FileResponse(os.path.join(AUTH_PATH, "signup.html"))
-
-
-# @app.get("/admin/login")
-# def load_admin_login():
-#     return FileResponse(os.path.join(AUTH_PATH, "admin_login.html"))
-
-# # VOICE LOOP
-# @app.post("/voice-loop", response_model=TextResponse)
-# def voice_to_voice():
-
-#     result = run_voice_assistant()
-
-#     if not result:
-#         return {
-#             "recognized_text": "",
-#             "response": "Assistant ended"
-#         }
-
-#     return result
-
-
-# # TEXT → SPEECH
-# @app.post("/speak")
-# def text_to_speech(data: TextRequest):
-
-#     if not data.text.strip():
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Text cannot be empty"
-#         )
-
-#     speak(data.text)
-
-#     return {
-#         "status": "spoken",
-#         "text": data.text
-#     }
-
-
-# @app.get("/emails/primary")
-# def get_primary_emails(request: Request):
-
-#     email = request.session.get("email")
-
-#     if not email:
-#         return {"error": []}
-
-#     emails = fetch_recent_primary_emails(email, max_results=10)
-
-#     return {"emails": emails}
-
-# @app.post("/assistant-exit")
-# def exit_assistant():
-#     request_exit()
-#     return {"status": "stop requested"}
-
-
-# @app.get("/gmail/test")
-# def gmail_test(request: Request):
-
-#     email = request.session.get("email")
-
-#     emails = fetch_recent_primary_emails(email)
-
-#     return {"emails": emails}
-
-
-
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, RedirectResponse
@@ -193,11 +37,23 @@ from app.admin.routes import router as admin_router
 
 from app.db import user_auth_collection
 
+# AI routes
+from app.ai.routes import router as ai_router
+
+# Whatsapp Router
+from app.voice.whatsapp_webhook import router as whatsapp_router
+
 from app.core.auth_guard import require_user
 
 from app.core.auth_middleware import AuthMiddleware
 
-app = FastAPI(title="Voice Email Assistant")
+from app.gmail.routes import router as gmail_router
+
+import app.utils.assistant_control as assistant_control
+import time
+from threading import Thread
+
+app = FastAPI(title="Voice Email Assistant",redirect_slashes=False)
 
 # ── Middleware ─────────────────────────────────────────────────────────────
 app.add_middleware(AuthMiddleware)
@@ -224,6 +80,9 @@ templates = Jinja2Templates(directory=VOICE_UI_PATH)
 app.include_router(auth_router)
 app.include_router(dashboard_router)
 app.include_router(admin_router)
+app.include_router(whatsapp_router)
+app.include_router(ai_router)
+app.include_router(gmail_router)
 
 # ── Static files ───────────────────────────────────────────────────────────
 app.mount(
@@ -249,68 +108,13 @@ def load_admin_login():
     return FileResponse(os.path.join(AUTH_PATH, "admin_login.html"))
 
 
-# ── Voice loop ─────────────────────────────────────────────────────────────
 
-# @app.post("/voice-loop", response_model=TextResponse)
-# def voice_to_voice(request: Request):
-#     """
-#     Start the voice assistant loop.
-#     Reads the logged-in user's email from the session and injects it
-#     into assistant_state so Gmail calls work correctly.
-#     """
-
-#     # ── Resolve the logged-in user ─────────────────────────────────────
-#     # user_email = request.session.get("email")
-
-#     # user = user_auth_collection.find_one({"email": user_email})
-#     user = require_user(request)
-
-#     if user.get("status") == "blocked":
-#         raise HTTPException(
-#             status_code=403,
-#             detail="Your account has been blocked. Contact admin@voxmail.com"
-#         )
-
-#     assistant_state.user_email = user["email"]
-
-#     print(f"[voice-loop] Starting assistant for user: {user['email']}")
-
-
-#     if user and user.get("status") == "blocked":
-#         raise HTTPException(
-#             status_code=403,
-#             detail="Your account has been blocked. Contact admin@voxmail.com"
-#         )
-    
-#     assistant_state.user_email = user["email"]
-
-
-#     # if not user_email:
-#     #     raise HTTPException(
-#     #         status_code=401,
-#     #         detail="Not logged in. Please sign in first."
-#     #     )
-
-
-
-#     # # Inject into shared assistant state so command_parser can use it
-#     # assistant_state.user_email = user_email
-
-#     print(f"[voice-loop] Starting assistant for user: {user['email']}")
-
-#     # ── Run the blocking voice loop ────────────────────────────────────
-#     result = run_voice_assistant()
-
-#     if not result:
-#         return {
-#             "recognized_text": "",
-#             "response": "Assistant ended"
-#         }
-
-#     return result
+assistant_running = False
 
 @app.post("/voice-loop")
 def voice_to_voice(request: Request):
+
+    global assistant_running, assistant_thread
 
     # user = require_user(request)
     email = request.session.get("email")
@@ -327,181 +131,42 @@ def voice_to_voice(request: Request):
             status_code=403,
             detail="Your account has been blocked. Contact admin@voxmail.com"
         )
+    
+    if assistant_running:
+        return {
+            "recognized_text": "",
+            "response": "Assistant already running"
+        }
 
     assistant_state.user_email = user["email"]
     assistant_state.username = user["username"]
 
     print(f"[voice-loop] Starting assistant for user: {user['email']}")
 
-    result = run_voice_assistant()
+    assistant_running = True
 
-    if not result:
-        return {
-            "recognized_text": "",
-            "response": "Assistant ended"
+    if assistant_running:
+        assistant_control.exit_requested = True
+        time.sleep(1)
+
+    assistant_control.exit_requested = False
+
+
+
+    assistant_thread = Thread(target = run_voice_assistant)
+    assistant_thread.daemon = True
+    assistant_thread.start()
+
+    assistant_running = True
+
+    
+    return{
+            "recognized_text":"",
+            "response":"Assistant started"
         }
 
-    return result
 
 from app.voice.stt import speech_to_text
-
-# @app.post("/stt-once")
-# def stt_once():
-#     print("SST triggered")
-
-#     result = speech_to_text()
-
-#     if isinstance(result,tuple):
-#         text = result[0]
-
-#     print("Recognized:", text)
-
-
-
-#     if not text:
-#         return {
-#             "recognized_text": "",
-#             "error": "No speech detected"
-#         }
-
-#     return {
-#         "recognized_text": text
-#     }
-
-# @app.post("/stt-once")
-# def stt_once():
-
-#     print("SST triggered")
-
-#     text, lang = speech_to_text()
-
-#     print("Recognized:", text)
-
-#     if not text:
-#         return {
-#             "recognized_text": "",
-#             "response": "No speech detected"
-#         }
-#     # ─────────────────────────────────────────
-#     # STEP 1: NEW USER TRIGGER
-#     # ─────────────────────────────────────────
-#     if assistant_state.user_email is None:
-
-#         if "new user" in text:
-
-#             assistant_state.auth_mode = "new_user"
-#             assistant_state.awaiting_email = True
-
-#             return {
-#                 "recognized_text": text,
-#                 "response": "Please tell me your registered email."
-#             }
-#     # ─────────────────────────────────────────
-#     # 2. EMAIL CAPTURE (HIGHEST PRIORITY)
-#     # ─────────────────────────────────────────
-#     from app.utils.voice_utils import normalize_email_full, normalize_pin
-#     if getattr(assistant_state, "awaiting_email", False):
-
-#         email = normalize_email_full(text)
-
-#         user = user_auth_collection.find_one({"email": email})
-
-#         if not user:
-#             return {
-#                 "recognized_text": text,
-#                 "response": "User not found. Please login using Google first."
-#             }
-
-#         assistant_state.user_email = email
-#         assistant_state.username = user.get("username")
-#         assistant_state.awaiting_email = False
-
-#         # 🔥 CHECK PIN EXISTS
-#         if user.get("pin"):
-#             assistant_state.awaiting_pin = True
-
-#             return {
-#                 "recognized_text": text,
-#                 "response": "Please say your 4 digit PIN."
-#             }
-
-#         else:
-#             assistant_state.awaiting_pin_creation = True
-
-#             return {
-#                 "recognized_text": text,
-#                 "response": "You don't have a PIN. Please create a 4 digit PIN."
-#             }
-
-#     # ─────────────────────────────────────────
-#     # 2. PIN CREATION
-#     # ─────────────────────────────────────────
-#     if getattr(assistant_state, "awaiting_pin_creation", False):
-
-#         pin = normalize_pin(text)
-
-#         if len(pin) != 4:
-#             return {
-#                 "recognized_text": text,
-#                 "response": "PIN must be 4 digits. Say again."
-#             }
-
-#         user_auth_collection.insert_one({
-#             "email": assistant_state.user_email,
-#             "pin": pin,
-#             "provider": "voice",
-#             "username": assistant_state.user_email.split("@")[0]
-#         })
-
-#         assistant_state.awaiting_pin_creation = False
-
-#         return {
-#             "recognized_text": text,
-#             "response": "Account created successfully. You can start using the assistant."
-#         }
-
-#     # ─────────────────────────────────────────
-#     # 3. LOGIN / SIGNUP TRIGGER
-#     # ─────────────────────────────────────────
-#     if assistant_state.user_email is None:
-
-#         if "new user" in text:
-
-#             assistant_state.auth_mode = "signup"
-#             assistant_state.awaiting_email = True
-
-#             return {
-#                 "recognized_text": text,
-#                 "response": "Please tell me your email address."
-#             }
-
-#         elif "login" in text or "existing user" in text:
-
-#             assistant_state.auth_mode = "login"
-#             assistant_state.awaiting_email = True
-
-#             return {
-#                 "recognized_text": text,
-#                 "response": "Please say your registered email."
-#             }
-
-#         else:
-#             return {
-#                 "recognized_text": text,
-#                 "response": "Say new user or login."
-#             }
-
-#     # ─────────────────────────────────────────
-#     # 4. NORMAL COMMAND FLOW
-#     # ─────────────────────────────────────────
-#     response = parse_command(text)
-
-#     return {
-#         "recognized_text": text,
-#         "response": response
-#     }
-    
-
 @app.post("/stt-once")
 def stt_once(request: Request):
 
@@ -727,7 +392,12 @@ def gmail_test(request: Request):
 
 @app.post("/assistant-exit")
 def exit_assistant():
-    request_exit()
+    global assistant_running
+    
+    assistant_control.request_exit()
+
+    assistant_running = False
+
     return {"status": "stop requested"}
 
 

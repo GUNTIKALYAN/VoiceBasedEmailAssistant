@@ -54,9 +54,7 @@ def normalize_email_full(text: str):
 
     text = str(text).lower().strip()
 
-    # ─────────────────────────────
     # STEP 1: Replace common speech patterns
-    # ─────────────────────────────
     replacements = {
         " at the rate ": "@",
         " at rate ": "@",
@@ -75,9 +73,7 @@ def normalize_email_full(text: str):
     # remove spaces completely
     text = text.replace(" ", "")
 
-    # ─────────────────────────────
     # STEP 2: Fix common domains
-    # ─────────────────────────────
     if "@gmailcom" in text:
         text = text.replace("@gmailcom", "@gmail.com")
 
@@ -87,9 +83,7 @@ def normalize_email_full(text: str):
     if "@gmail" in text and not text.endswith(".com"):
         text = text + ".com"
 
-    # ─────────────────────────────
     # STEP 3: If no domain → default
-    # ─────────────────────────────
     if "@" not in text:
         text = text + "@gmail.com"
 
