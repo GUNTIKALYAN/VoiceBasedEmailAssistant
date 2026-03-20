@@ -65,3 +65,12 @@ build/
 docker-compose.yml
 Dockerfile.frontend
 Dockerfile.backend
+
+
+__pycache__/
+*.pyc
+
+LICENSE
+FolderStructure.txt
+workflow.txt
+milestone1.txt

@@ -1,7 +1,16 @@
 SpeechRecognition
 pyttsx3
 pyaudio
-flask
 smtplib
 imaplib
 email
+fastapi
+pymongo
+groq
+jinja2
+requests
+twilio
+pydub
+edge-tts
+uvicorn
+python-dotenv
