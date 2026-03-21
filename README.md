@@ -55,6 +55,28 @@ Provides operational visibility and control over the entire system.
 
 ---
 
+## Demo & Screenshots
+
+### User Login (Voice + Google Auth)
+![User Login](assets/user_login.png)
+
+---
+
+### Admin Login Portal
+![Admin Login](assets/admin_login.png)
+
+---
+
+### User Dashboard (Voice Assistant Interface)
+![User Dashboard](assets/user_dashboard.png)
+
+---
+
+### Admin Dashboard (Monitoring & Analytics)
+![Admin Dashboard](assets/admin_dashboard.png)
+
+---
+
 ## System Architecture
 
 The system is designed as a **multi-modal AI assistant**, supporting interaction through **voice, web interface, and WhatsApp**, along with **voice-enabled authentication**.
@@ -149,28 +171,6 @@ The system is designed as a **multi-modal AI assistant**, supporting interaction
 - Gmail API → sends email  
 - Output → voice (TTS) or WhatsApp reply  
 
-
----
-
-## Demo & Screenshots
-
-### User Login (Voice + Google Auth)
-![User Login](./assets/user_login.png)
-
----
-
-### Admin Login Portal
-![Admin Login](./assets/admin_login.png)
-
----
-
-### User Dashboard (Voice Assistant Interface)
-![User Dashboard](./assets/user_dashboard.png)
-
----
-
-### Admin Dashboard (Monitoring & Analytics)
-![Admin Dashboard](./assets/admin_dashboard.png)
 
 ---
 
@@ -392,7 +392,7 @@ TWILIO_AUTH_TOKEN=your_token
 TWILIO_WHATSAPP_NUMBER=your_number
 
 ### App Config
-SECRET_KEY=your_secret_key
+SECRET_KEY=your_secret_key```
 
 `cd backend`
 
