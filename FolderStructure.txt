@@ -86,4 +86,7 @@ EMAILVOICEASSISTANT/
 ├── README.md
 ├── requirements.txt
 ├── milestone1.txt
+├── Dockerfile.backend
+├── Dockerfile.frontend
+├── docker-compose.yml
 └── workflow.txt
