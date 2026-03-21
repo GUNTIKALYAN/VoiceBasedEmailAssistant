@@ -378,7 +378,6 @@ Make sure you have the following installed:
 
 Create a `.env` file inside the `backend/` directory:
 
-```env
 ### Gmail API
 GOOGLE_CLIENT_ID=your_client_id
 GOOGLE_CLIENT_SECRET=your_client_secret
@@ -392,7 +391,9 @@ TWILIO_AUTH_TOKEN=your_token
 TWILIO_WHATSAPP_NUMBER=your_number
 
 ### App Config
-SECRET_KEY=your_secret_key```
+SECRET_KEY=your_secret_key 
+
+
 
 `cd backend`
 
