@@ -58,22 +58,22 @@ Provides operational visibility and control over the entire system.
 ## Demo & Screenshots
 
 ### User Login (Voice + Google Auth)
-![User Login](assets/user_login.png)
+![User Login](./assests/user_login.png)
 
 ---
 
 ### Admin Login Portal
-![Admin Login](assets/admin_login.png)
+![Admin Login](./assests/admin_login.png)
 
 ---
 
 ### User Dashboard (Voice Assistant Interface)
-![User Dashboard](assets/user_dashboard.png)
+![User Dashboard](./assests/user_dashboard.png)
 
 ---
 
 ### Admin Dashboard (Monitoring & Analytics)
-![Admin Dashboard](assets/admin_dashboard.png)
+![Admin Dashboard](./assests/admin_dashboard.png)
 
 ---
 
